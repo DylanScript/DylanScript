@@ -1,0 +1,2800 @@
+Controls.ButtonClicked = ButtonClicked
+GraphicsWindow.KeyDown = KeyDown
+GraphicsWindow.KeyUp = KeyUp
+GraphicsWindow.MouseUp = MouseUp
+GraphicsWindow.MouseDown = MouseDown
+
+GraphicsWindow.Hide()
+TextWindow.Hide()
+nl = Text.GetCharacter(10)
+vars["newline"] = Text.GetCharacter(10)
+
+sm = Text.GetCharacter(34)
+exts = "Uncompiled DylanScript File|*.ds"
+i = 1
+If Program.GetArgument(1) = "" Then
+  p = LDDialogs.OpenFile(exts,"")
+Else
+  p = Program.GetArgument(1)
+EndIf
+
+pm = LDFile.GetFile(p)
+
+GraphicsWindow.Title = "DylanScript Security"
+GraphicsWindow.Show()
+GraphicsWindow.Width = 400
+GraphicsWindow.Height = 500
+GraphicsWindow.BrushColor = "Blue"
+GraphicsWindow.FontSize = 40
+GraphicsWindow.DrawText(5,5,"Please wait: ")
+GraphicsWindow.BrushColor = "Black"
+GraphicsWindow.FontSize = 15
+txt = "We're just checking that this file "
+txt = txt + "doesn't contain a virus. This"
+txt = txt + " shouldn't take too long and "
+txt = txt + "we will run your program as s"
+txt = txt + "oon as it has been scanned. Y"
+txt = txt + "ou will still be notified eve"
+txt = txt + "ry time it tries to create, m"
+txt = txt + "odify or delete files and dir"
+txt = txt + "ectories."
+GraphicsWindow.DrawBoundText(5,50,390,txt)
+txt = "Getting app info..."
+GraphicsWindow.DrawBoundText(5,150,390,txt)
+txt = "Scanning " + pm + " for viruses..."
+GraphicsWindow.DrawBoundText(5,175,390,txt)
+txt = "App name: "
+GraphicsWindow.DrawBoundText(5,200,100,txt)
+txt = "Publisher: "
+GraphicsWindow.DrawBoundText(5,225,100,txt)
+
+ScanStart:
+
+fc = LDFile.ReadToArray(p)
+c = fc[i]
+
+If c = "#appname" Then
+  i = i+1
+  c = fc[i]
+  name = c
+  GraphicsWindow.DrawText(80,200,name)
+  i = i+2
+EndIf
+
+If name <> "" Then
+  
+  
+Else
+  
+  
+EndIf
+i = 1
+Program.Delay(2000)
+GraphicsWindow.Clear()
+GraphicsWindow.Title = "DylanScript Application"
+GraphicsWindow.Hide()
+RunDS()
+
+Sub RunDS
+  i = 1
+  TextWindow.Title = "DylanScript Application"
+  Start:
+  c = Text.ConvertToLowerCase(File.ReadLine(p,i))
+  
+  If c = "#appname" Then
+    i = i+2
+    Goto Start
+  EndIf
+  
+  If c = "/appname" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#print" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#input" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/input" Then
+    a = TextWindow.Read()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#consolecolour" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#openvariable" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/openvariable" Then
+    vto = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getvariable" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/getvariable" Then
+    a = vars[vto]
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#setvariable" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/setvariable" Then
+    vars[vto] = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#textcolour" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#printline" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#string" Then
+    i = i+1
+    a = File.ReadLine(p,i)
+    c = a
+    i = i+2
+    Goto Start
+  EndIf
+
+  If c = "#integer" Then
+    i = i+1
+    a = File.ReadLine(p,i)*1
+    c = a
+    i = i+2
+    Goto Start
+  EndIf
+  
+  If c = "/print" Then
+    TextWindow.Write(a)
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/printline" Then
+    TextWindow.WriteLine(a)
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/consolecolour" Then
+    TextWindow.BackgroundColor = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/textcolour" Then
+    TextWindow.ForegroundColor = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#consoletop" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/consoletop" Then
+    TextWindow.Top = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#consoleleft" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/consoleleft" Then
+    TextWindow.Left = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#consoletitle" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/consoletitle" Then
+    TextWindow.Title = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#givecontrol" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/givecontrol" Then
+    If LDFile.Exists(a) Then
+      p = a
+    Else
+      TextWindow.WriteLine(includeerror)
+    EndIf
+    i = 1
+    Goto Start
+  EndIf
+
+  If c = "#goto" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/goto" Then
+    i = a*1
+    Goto Start
+  EndIf
+
+  If c = "#createdir" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/createdir" Then
+    secwin = LDWindows.Create()
+    LDWindows.Active = secwin
+    GraphicsWindow.Title = "DylanScript Security"
+    GraphicsWindow.Height = 450
+    GraphicsWindow.Width = 300
+    GraphicsWindow.Top = Desktop.Height/2-225
+    GraphicsWindow.Left = Desktop.Width/2-150
+    txt = "Do you want to allow this app to "
+    GraphicsWindow.DrawText(5,5,txt)
+    txt = "complete this file operation?"
+    GraphicsWindow.DrawText(5,25,txt)
+    GraphicsWindow.DrawText(5,45,"App name:")
+    GraphicsWindow.DrawText(90,45,pm)
+    txt = "Type: create directory"
+    GraphicsWindow.DrawText(5,65,txt)
+    GraphicsWindow.DrawText(5,85,"Directory:")
+    GraphicsWindow.DrawText(95,85,a)
+    aob = Controls.AddButton("Allow",5,270)
+    db = Controls.AddButton("Deny",155,270)
+    t1 = "Green"
+    t2 = "DarkGreen"
+    t3 = "Lime"
+    t4 = "Blue"
+    t5 = "Cyan"
+    t6 = "DarkBlue"
+    t7 = "False"
+LDControls.SetButtonStyle(aob,t1,t2,t3,t4,t5,t6,5,t7)
+    t1 = "Red"
+    t2 = "DarkRed"
+    t3 = "DarkOrange"
+    t4 = "Yellow"
+    t5 = "Orange"
+    t6 = "Pink"
+    t7 = "False"
+LDControls.SetButtonStyle(db,t1,t2,t3,t4,t5,t6,5,t7)
+    Controls.SetSize(aob,140,30)
+    Controls.SetSize(db,140,30)
+    mode = "createdir"
+    it = i
+    While i = it
+      
+    EndWhile
+    GraphicsWindow.Clear()
+    GraphicsWindow.Hide()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#openfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/openfile" Then
+    fto = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#deletefile" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/deletefile" Then
+    secwin = LDWindows.Create()
+    LDWindows.Active = secwin
+    GraphicsWindow.Title = "DylanScript Security"
+    GraphicsWindow.Height = 450
+    GraphicsWindow.Width = 300
+    GraphicsWindow.Top = Desktop.Height/2-225
+    GraphicsWindow.Left = Desktop.Width/2-150
+    txt = "Do you want to allow this app to "
+    GraphicsWindow.DrawText(5,5,txt)
+    txt = "complete this file operation?"
+    GraphicsWindow.DrawText(5,25,txt)
+    GraphicsWindow.DrawText(5,45,"App name:")
+    GraphicsWindow.DrawText(90,45,pm)
+    txt = "Type: delete file"
+    GraphicsWindow.DrawText(5,65,txt)
+    GraphicsWindow.DrawText(5,85,"File:")
+    GraphicsWindow.DrawText(95,85,a)
+    aob = Controls.AddButton("Allow",5,270)
+    db = Controls.AddButton("Deny",155,270)
+    t1 = "Green"
+    t2 = "DarkGreen"
+    t3 = "Lime"
+    t4 = "Blue"
+    t5 = "Cyan"
+    t6 = "DarkBlue"
+    t7 = "False"
+LDControls.SetButtonStyle(aob,t1,t2,t3,t4,t5,t6,5,t7)
+    t1 = "Red"
+    t2 = "DarkRed"
+    t3 = "DarkOrange"
+    t4 = "Yellow"
+    t5 = "Orange"
+    t6 = "Pink"
+    t7 = "False"
+LDControls.SetButtonStyle(db,t1,t2,t3,t4,t5,t6,5,t7)
+    Controls.SetSize(aob,140,30)
+    Controls.SetSize(db,140,30)
+    mode = "deletefile"
+    it = i
+    While i = it
+      
+    EndWhile
+    GraphicsWindow.Clear()
+    GraphicsWindow.Hide()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#deletedir" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/deletedir" Then
+    secwin = LDWindows.Create()
+    LDWindows.Active = secwin
+    GraphicsWindow.Title = "DylanScript Security"
+    GraphicsWindow.Height = 450
+    GraphicsWindow.Width = 300
+    GraphicsWindow.Top = Desktop.Height/2-225
+    GraphicsWindow.Left = Desktop.Width/2-150
+    txt = "Do you want to allow this app to "
+    GraphicsWindow.DrawText(5,5,txt)
+    txt = "complete this file operation?"
+    GraphicsWindow.DrawText(5,25,txt)
+    GraphicsWindow.DrawText(5,45,"App name:")
+    GraphicsWindow.DrawText(90,45,pm)
+    txt = "Type: delete directory"
+    GraphicsWindow.DrawText(5,65,txt)
+    GraphicsWindow.DrawText(5,85,"Directory:")
+    GraphicsWindow.DrawText(95,85,a)
+    aob = Controls.AddButton("Allow",5,270)
+    db = Controls.AddButton("Deny",155,270)
+    t1 = "Green"
+    t2 = "DarkGreen"
+    t3 = "Lime"
+    t4 = "Blue"
+    t5 = "Cyan"
+    t6 = "DarkBlue"
+    t7 = "False"
+LDControls.SetButtonStyle(aob,t1,t2,t3,t4,t5,t6,5,t7)
+    t1 = "Red"
+    t2 = "DarkRed"
+    t3 = "DarkOrange"
+    t4 = "Yellow"
+    t5 = "Orange"
+    t6 = "Pink"
+    t7 = "False"
+LDControls.SetButtonStyle(db,t1,t2,t3,t4,t5,t6,5,t7)
+    Controls.SetSize(aob,140,30)
+    Controls.SetSize(db,140,30)
+    mode = "deletedir"
+    it = i
+    While i = it
+      
+    EndWhile
+    GraphicsWindow.Clear()
+    GraphicsWindow.Hide()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#readfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/readfile" Then
+    a = File.ReadContents(fto)
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#writefile" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/writefile" Then
+    secwin = LDWindows.Create()
+    LDWindows.Active = secwin
+    GraphicsWindow.Title = "DylanScript Security"
+    GraphicsWindow.Height = 450
+    GraphicsWindow.Width = 300
+    GraphicsWindow.Top = Desktop.Height/2-225
+    GraphicsWindow.Left = Desktop.Width/2-150
+    txt = "Do you want to allow this app to "
+    GraphicsWindow.DrawText(5,5,txt)
+    txt = "complete this file operation?"
+    GraphicsWindow.DrawText(5,25,txt)
+    GraphicsWindow.DrawText(5,45,"App name:")
+    GraphicsWindow.DrawText(90,45,pm)
+    txt = "Type: overwrite file"
+    GraphicsWindow.DrawText(5,65,txt)
+    GraphicsWindow.DrawText(5,85,"File:")
+    GraphicsWindow.DrawText(95,85,a)
+    aob = Controls.AddButton("Allow",5,270)
+    db = Controls.AddButton("Deny",155,270)
+    t1 = "Green"
+    t2 = "DarkGreen"
+    t3 = "Lime"
+    t4 = "Blue"
+    t5 = "Cyan"
+    t6 = "DarkBlue"
+    t7 = "False"
+LDControls.SetButtonStyle(aob,t1,t2,t3,t4,t5,t6,5,t7)
+    t1 = "Red"
+    t2 = "DarkRed"
+    t3 = "DarkOrange"
+    t4 = "Yellow"
+    t5 = "Orange"
+    t6 = "Pink"
+    t7 = "False"
+LDControls.SetButtonStyle(db,t1,t2,t3,t4,t5,t6,5,t7)
+    Controls.SetSize(aob,140,30)
+    Controls.SetSize(db,140,30)
+    mode = "writefile"
+    it = i
+    While i = it
+      
+    EndWhile
+    GraphicsWindow.Clear()
+    GraphicsWindow.Hide()
+    i = i+1
+    Goto Start
+
+  EndIf
+
+  If c = "#text1" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/text1" Then
+    text1 = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#text2" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/text2" Then
+    text2 = a
+    i = i+1
+    Goto Start
+  EndIf
+
+
+  If c = "#append" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+
+
+  If c = "/append" Then
+    a = Text.Append(text1,text2)
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#programdir" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/programdir" Then
+    a = LDFile.GetFolder(p) + "\"
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#filenotfounderror" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/filenotfounderror" Then
+    includeerror = a
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#getdirs" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/getdirs" Then
+    d = File.GetDirectories(a)
+    n = 1
+    While Array.GetItemCount(d) > n
+      a = a + d[n]
+      a = a + nl
+      n = n+1
+    EndWhile
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#getfiles" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "/getfiles" Then
+    d = File.GetFiles(a)
+    n = 1
+    While Array.GetItemCount(d) > n
+      a = a + d[n]
+      a = a + nl
+      n = n+1
+    EndWhile
+
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#showconsole" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/showconsole" Then
+    TextWindow.Show()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#hideconsole" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/hideconsole" Then
+    TextWindow.Hide()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#clearconsole" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/clearconsole" Then
+    TextWindow.Clear()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getsubdir" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getsubdir" Then
+    a = LDFile.GetFolder(a) + "\"
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getsubfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getsubfile" Then
+    a = LDFile.GetFile(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#pauseconsole" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/pauseconsole" Then
+    TextWindow.Pause()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#pauseconsoleifvisible" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/pauseconsoleifvisible" Then
+    TextWindow.PauseIfVisible()
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#inputasinteger" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/inputasinteger" Then
+    a = TextWindow.ReadNumber()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lineoffile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lineoffile" Then
+    ftol = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setfileline" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setfileline" Then
+    txt = "The program '" + p + "' is attem"
+    txt = txt + "pting to write to the file"
+    txt = txt + " '" + a + "'. Would you"
+    txt = txt + " like to allow this?"
+    title = "DylanScript - Warning"
+    r = LDDialogs.Confirm(txt,title)
+    If r = "Yes" Then
+      File.WriteLine(fto,ftol,a)
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#appendtofile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/appendtofile" Then
+    File.AppendContents(fto,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getfileline" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getfileline" Then
+    a = File.ReadLine(fto,ftol)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#copyfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/copyfile" Then
+    File.CopyFile(fto,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getlastfileerror" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getlastfileerror" Then
+    a = File.LastError
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#insertlineinfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/insertlineinfile" Then
+    File.InsertLine(fto,ftol,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lowercase" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lowercase" Then
+    a = Text.ConvertToLowerCase(a)
+    i = i+1
+    Goto Start
+  EndIf
+
+  If c = "#uppercase" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/uppercase" Then
+    a = Text.ConvertToUpperCase(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#unicodecharacter" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/unicodecharacter" Then
+    a = Text.GetCharacter(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#unicodecode" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/unicodecode" Then
+    a = Text.GetCharacterCode(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#textlength" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/textlength" Then
+    a = Text.GetLength(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#loadimage" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/loadimage" Then
+    a = ImageList.LoadImage(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#addimageasshape" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/addimageasshape" Then
+    a = Shapes.AddImage(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#if" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/if" Then
+    If bool Then
+      p = a
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#value1" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/value1" Then
+    value1 = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#value2" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/value2" Then
+    value2 = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#=" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/=" Then
+    If value1 = value2 Then
+      bool = "True"
+    Else
+      bool = "False"
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  
+  
+  If c = "#<" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/<" Then
+    If value1<value2 Then
+      bool = "True"
+    Else
+      bool = "False"
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#>" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/>" Then
+    If value1>value2 Then
+      bool = "True"
+    Else
+      bool = "False"
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowbackgroundcolour" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowbackgroundcolour" Then
+    GraphicsWindow.BackgroundColor = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowbrushcolour" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowbrushcolour" Then
+    GraphicsWindow.PenColor = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowpencolour" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowpencolour" Then
+    GraphicsWindow.PenColor = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowtop" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowtop" Then
+    GraphicsWindow.Top = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowleft" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowleft" Then
+    GraphicsWindow.Left = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowheight" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowheight" Then
+    GraphicsWindow.Height = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowwidth" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowwidth" Then
+    GraphicsWindow.Width = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowisresizable" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowisresizable" Then
+    GraphicsWindow.CanResize = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowfontisbold" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowfontisbold" Then
+    GraphicsWindow.FontBold = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowfontisitalic" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowfontisitalic" Then
+    GraphicsWindow.FontItalic = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowfontname" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowfontname" Then
+    GraphicsWindow.FontName = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowfontsize" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowfontsize" Then
+    GraphicsWindow.FontSize = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lastwindowkey" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lastwindowkey" Then
+    a = GraphicsWindow.LastKey
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lastwindowtext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lastwindowtext" Then
+    a = GraphicsWindow.LastText
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setwindowcursorx" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setwindowcursorx" Then
+    LDGraphicsWindow.MouseX = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getwindowcursorx" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getwindowcursorx" Then
+    a = GraphicsWindow.MouseX
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setwindowcursory" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setwindowcursory" Then
+    LDGraphicsWindow.MouseY = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getwindowcursory" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getwindowcursory" Then
+    a = GraphicsWindow.MouseY
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowpenwidth" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowpenwidth" Then
+    GraphicsWindow.PenWidth = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#windowtitle" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/windowtitle" Then
+    GraphicsWindow.Title = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#clearwindow" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/clearwindow" Then
+    GraphicsWindow.Clear()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#addtexttowindow" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/addtexttowindow" Then
+    x = vars["x"]
+    y = vars["y"]
+    GraphicsWindow.DrawText(x,y,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getrandomcolour" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getrandomcolour" Then
+    a = GraphicsWindow.GetRandomColor()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getrgb" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getrgb" Then
+    r = vars["red"]
+    g = vars["green"]
+    b = vars["blue"]
+    a = GraphicsWindow.GetColorFromRGB(r,g,b)
+  EndIf
+  
+  If c = "#showwindow" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/showwindow" Then
+    GraphicsWindow.Show()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#hidewindow" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/hidewindow" Then
+    GraphicsWindow.Hide()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#sendmessage" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/sendmessage" Then
+    GraphicsWindow.ShowMessage(a,"Message")
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#createbutton" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createbutton" Then
+    x = vars["x"]
+    y = vars["y"]
+    Controls.AddButton(a,x,y)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#createtextbox" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createtextbox" Then
+    x = vars["x"]
+    y = vars["y"]
+    Controls.AddTextBox(x,y)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#createmultilinetextbox" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createmultilinetextbox" Then
+    x = vars["x"]
+    y = vars["y"]
+    a = Controls.AddMultiLineTextBox(x,y)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#showcontrol" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/showcontrol" Then
+    Controls.ShowControl(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#hidecontrol" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/hidecontrol" Then
+    Controls.HideControl(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lastbutton" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lastbutton" Then
+    a = Controls.LastClickedButton
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lasttextbox" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lasttextbox" Then
+    a = Controls.LastTypedTextBox
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getbuttontext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getbuttontext" Then
+    a = Controls.GetButtonCaption(vars["control"])
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#gettextboxtext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/gettextboxtext" Then
+    a = Controls.GetTextBoxText(vars["control"])
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setbuttontext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setbuttontext" Then
+    Controls.SetButtonCaption(vars["control"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#settextboxtext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/settextboxtext" Then
+    Controls.SetTextBoxText(vars["control"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#movecontrol" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/movecontrol" Then
+    Controls.Move(a,vars["x"],vars["y"])
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#removecontrol" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/removecontrol" Then
+    Controls.Remove(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setcontrolsize" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setcontrolsize" Then
+    width = vars["width"]
+    height = vars["height"]
+    Controls.SetSize(a,width,height)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#gethour" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/gethour" Then
+    a = Clock.Hour
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getminute" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getminute" Then
+    a = Clock.Minute
+    i = i+1
+    Goto Start
+  EndIf
+    
+  If c = "#getsecond" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getsecond" Then
+    a = Clock.Second
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getmillisecond" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getmillisecond" Then
+    a = Clock.Millisecond
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getdate" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getdate" Then
+    a = Clock.Day
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getweekday" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getweekday" Then
+    a = Clock.WeekDay
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getmonth" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getmonth" Then
+    a = Clock.Month
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getfulltime" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getfulltime" Then
+    a = Clock.Time
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getfulldate" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getfulldate" Then
+    a = Clock.Date
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getyear" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getyear" Then
+    a = Clock.Year
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getmillisecondssince1900" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getmillisecondssince1900" Then
+    a = Clock.ElapsedMilliseconds
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getdesktopwidth" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getdesktopwidth" Then
+    a = Desktop.Width
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getdesktopheight" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getdesktopheight" Then
+    a = Desktop.Height
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setwallpaper" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setwallpaper" Then
+        secwin = LDWindows.Create()
+    LDWindows.Active = secwin
+    GraphicsWindow.Title = "DylanScript Security"
+    GraphicsWindow.Height = 450
+    GraphicsWindow.Width = 300
+    GraphicsWindow.Top = Desktop.Height/2-225
+    GraphicsWindow.Left = Desktop.Width/2-150
+    txt = "Do you want to allow this app to "
+    GraphicsWindow.DrawText(5,5,txt)
+    txt = "complete this operation?"
+    GraphicsWindow.DrawText(5,25,txt)
+    GraphicsWindow.DrawText(5,45,"App name:")
+    GraphicsWindow.DrawText(90,45,pm)
+    txt = "Type: set wallpaper"
+    GraphicsWindow.DrawText(5,65,txt)
+    GraphicsWindow.DrawText(5,85,"Image:")
+    GraphicsWindow.DrawText(95,85,a)
+    aob = Controls.AddButton("Allow",5,270)
+    db = Controls.AddButton("Deny",155,270)
+    t1 = "Green"
+    t2 = "DarkGreen"
+    t3 = "Lime"
+    t4 = "Blue"
+    t5 = "Cyan"
+    t6 = "DarkBlue"
+    t7 = "False"
+LDControls.SetButtonStyle(aob,t1,t2,t3,t4,t5,t6,5,t7)
+    t1 = "Red"
+    t2 = "DarkRed"
+    t3 = "DarkOrange"
+    t4 = "Yellow"
+    t5 = "Orange"
+    t6 = "Pink"
+    t7 = "False"
+LDControls.SetButtonStyle(db,t1,t2,t3,t4,t5,t6,5,t7)
+    Controls.SetSize(aob,140,30)
+    Controls.SetSize(db,140,30)
+    mode = "setwallpaper"
+    it = i
+    While i = it
+      
+    EndWhile
+    GraphicsWindow.Clear()
+    GraphicsWindow.Hide()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getdefinition" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getdefinition" Then
+    a = Dictionary.GetDefinition(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#gotoline" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/gotoline" Then
+    i = a-0
+    Goto Start
+  EndIf
+  
+  If c = "#loadimage" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/loadimage" Then
+    a = ImageList.LoadImage(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#endprogram" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/endprogram" Then
+    Program.End()
+  EndIf
+  
+  If c = "#getargument" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getargument" Then
+    a = Program.GetArgument(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#wait" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/wait" Then
+    Program.Delay(a) 
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#playsound" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/playsound" Then
+    Sound.Play(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#pausesound" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/pausesound" Then
+    Sound.Pause(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#contains" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/contains" Then
+    bool = Text.IsSubText(vars["text"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#startswith" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/startswith" Then
+    bool = Text.StartsWith(vars["text"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#endswith" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/endswith" Then
+    bool = Text.EndsWith(vars["text"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#gettexttoend" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getsubtexttoend" Then
+    a = Text.GetSubTextToEnd(vars["text"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getsubtext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getsubtext" Then
+    length = vars["length"]
+    Text.GetSubText(vars["text"],a,length)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#runexe" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/runexe" Then
+    txt = "The program '" + p + "' is attem"
+    txt = txt + "pting to run the exe file "
+    txt = txt + "'" + a + "'. This could be"
+    txt = txt + " dangerous since exe files"
+    txt = txt + "  do not run under DylanSc"
+    txt = txt + "ript and you will not be n"
+    txt = txt + "otified about any file ope"
+    txt = txt + "rations. Remember, only ru"
+    txt = txt + "n apps that you trust. Wou"
+    txt = txt + "ld you like to allow this?"
+    title = "DylanScript - Warning"
+    r = LDDialogs.Confirm(txt,title)
+    If r = "Yes" Then
+      Desktop.SetWallPaper(a)
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#stopexe" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/stopexe" Then
+    txt = "The program '" + p + "' is attem"
+    txt = txt + "pting to stop the program "
+    txt = txt + "'" + a + "'. If you want t"
+    txt = txt + "o close this app, press ye"
+    txt = txt + "s. If this will cause you "
+    txt = txt + "to lose work or crash your"
+    txt = txt + " computer, press no. Would"
+    txt = txt + " you like to allow this?"
+    title = "DylanScript - Warning"
+    r = LDDialogs.Confirm(txt,title)
+    If r = "Yes" Then
+      LDProcess.Stop(a)
+    EndIf
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setclipboardtext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setclipboardtext" Then
+    LDClipboard.SetText(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getclipboardtext" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getclipboardtext" Then
+    a = LDClipboard.GetText()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setclipboardimage" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setclipboardimage" Then
+    LDClipboard.SetImage(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getclipboardimage" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getclipboardimage" Then
+    a = LDClipboard.GetImage()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#clearclipboard" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/clearclipboard" Then
+    LDClipboard.Clear()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#createbrowser" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createbrowser" Then
+    width = vars["width"]
+    height = vars["height"]
+    LDControls.AddBrowser(width,height,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursordefault" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursordefault" Then
+    LDCursors.Arrow()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorarrowwithcd" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorarrowwithcd" Then
+    LDCursors.ArrowCD()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorcross" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorcross" Then
+    LDCursors.Cross()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorhand" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorhand" Then
+    LDCursors.Hand()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorhelp" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorhelp" Then
+    LDCursors.Help()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursoribeam" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursoribeam" Then
+    LDCursors.IBeam()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorinvalid" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorinvalid" Then
+    LDCursors.Invalid()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorhide" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorhide" Then
+    LDCursors.None()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorpen" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorpen" Then
+    LDCursors.Pen()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorscroll" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorscroll" Then
+    LDCursors.Scroll()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorresize" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorresize" Then
+    LDCursors.SizeAll()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorresizenesw" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorresizenesw" Then
+    LDCursors.SizeNESW()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorresizens" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorresizens" Then
+    LDCursors.SizeNS()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorresizewe" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorresizewe" Then
+    LDCursors.SizeWE()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorarrowwithwait" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorarrowwithwait" Then
+    LDCursors.Starting()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorwait" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorwait" Then
+    LDCursors.Wait()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getimageheight" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getimageheight" Then
+    a = ImageList.GetHeightOfImage(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getimagewidth" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getimagewidth" Then
+    a = ImageList.GetWidthOfImage(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#leftmousedown" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/leftmousedown" Then
+    bool = Mouse.IsLeftButtonDown
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#rightmousedown" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/rightmousedown" Then
+    bool = Mouse.IsRightButtonDown
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getwebsitecontents" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getwebsitecontents" Then
+    a = Network.GetWebPageContents(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#downloadfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/downloadfile" Then
+    a = Network.DownloadFile(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#amountofarguments" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/amountofarguments" Then
+    a = Program.ArgumentCount
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getcolour aliceblue" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getcolour aliceblue" Then
+    a = LDColours.AliceBlue
+    i = i+1 
+    Goto Start
+  EndIf
+  
+  If c = "#getcolour antiquewhite" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getcolour antiquewhite" Then
+    a = LDColours.AntiqueWhite
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#savefiledialog" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/savefiledialog" Then
+    a = LDDialogs.SaveFile(vars["extensions"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#openfiledialog" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/openfiledialog" Then
+    a = LDDialogs.OpenFile(vars["extensions"],a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#askdialog" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/askdialog" Then
+    txt = "DylanScript - Question"
+    a = LDDialogs.Confirm(a,txt)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#openfolderdialog" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/openfolderdialog" Then
+    a = LDDialogs.GetFolder(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getappdatafolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getappdatafolder" Then
+    a = LDFile.AppDataFolder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getcsvplaceholder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getcsvplaceholder" Then
+    a = LDFile.CSVplaceholder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setcsvplaceholder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setcsvplaceholder" Then
+    LDFile.CSVplaceholder = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getdocumentsfolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getdocumentsfolder" Then
+    a = LDFile.DocumentsFolder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getmusicfolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getmusicfolder" Then
+    a = LDFile.MusicFolder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getpicturesfolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getpicturesfolder" Then
+    a = LDFile.PicturesFolder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getpublicfolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getpublicfolder" Then
+    a = LDFile.PublicFolder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getusername" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getusername" Then
+    a = LDFile.UserName
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#gettempfolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/gettempfolder" Then
+    a = LDFile.TempFolder
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#filelastaccessedtime" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/filelastaccessedtime" Then
+    a = LDFile.AccessTime(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#copyfolder" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/copyfolder" Then
+    LDFile.CopyDirectory(fto,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#filecreatedtime" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/filecreatedtime" Then
+    a = LDFile.CreationTime(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#fileexists" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/fileexists" Then
+    bool = LDFile.Exists(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getallsubdirs" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getallsubdirs" Then
+    d = LDFile.GetAllDirectories(a)
+    n = 1
+    While Array.GetItemCount(d) > n
+      a = a + d[n]
+      a = a + nl
+      n = n+1
+    EndWhile
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getfilename" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getfilename" Then
+    a = LDFile.GetFile(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getfileextension" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getfileextension" Then
+    a = LDFile.GetExtension(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getlinesinfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getlinesinfile" Then
+    a = LDFile.Length(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#savevariables" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/savevariables" Then
+    File.WriteContents(a,vars)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#loadvariables" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/loadvariables" Then
+    vars = File.ReadContents(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#filelastmodifiedtime" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/filelastmodifiedtime" Then
+    a = LDFile.ModifiedTime(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#lasttimemusicplayed" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/lasttimemusicplayed" Then
+    a = LDFile.MusicPlayTime(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#readencodedfile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/readencodedfile" Then
+    a = LDFile.ReadANSI(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#readcsv" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/readcsv" Then
+    a = LDFile.ReadCSV(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#movefile" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/movefile" Then
+    LDFile.RenameFile(fto,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#movedir" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/movedir" Then
+    a = LDFile.RenameDirectory(fto,a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getfilesize" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getfilesize" Then
+    a = LDFile.Size(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#blutoothdataavailable" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/blutoothdataavailable" Then
+    a = LDBlueTooth.DataAvailable
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#currentbluetoothdeviceconnected" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/currentbluetoothdeviceconnected" Then
+    a = LDBlueTooth.Device
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setbluetoothdataencoding" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setbluetoothdataencoding" Then
+    LDBlueTooth.Encode = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getbluetoothdataencoding" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getbluetoothdataencoding" Then
+    a = LDBlueTooth.Encode
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getlastbluetoothdeviceconnected" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getlastbluetoothdeviceconnected" Then
+    a = LDBlueTooth.LastDevice
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getbluetoothservice" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getbluetoothservice" Then
+    a = LDBlueTooth.Service
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#connecttobluetoothdevice" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/connecttobluetoothdevice" Then
+    LDBlueTooth.Connect()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getbluetoothdevices" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/getbluetoothdevices" Then
+    a = LDBlueTooth.GetDevices()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#getlastbluetootherror" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#initialisebluetoothdevice" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/initialisebluetoothdevice" Then
+    LDBlueTooth.Initialise()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#recievebluetoothdata" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/recievebluetoothdata" Then
+    a = LDBlueTooth.ReceiveData()
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#sendbluetoothdata" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/sendbluetoothdata" Then
+    LDBlueTooth.SendData(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#createchart" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createchart" Then
+    width = vars["width"]
+    height = vars["height"]
+    LDChart.AddChart(width,height)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#setchartdata" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/setchartdata" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#isserveravailable" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/isserveravailable" Then
+    If LDClient.CheckServer(a) = "AVAILABLE" Then
+      a = "True"
+    Else
+      a = "False"
+    EndIf
+  EndIf
+  
+  If c = "#createtickbox" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createtickbox" Then
+    LDControls.AddCheckBox(a)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#createcombobox" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/createcombobox" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#cursorcustom" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/cursorcustom" Then
+    cur = LDCursors.CreateCursor(a,0,0)
+    LDCursors.SetUserCursor(cur)
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#emailrecipient" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/emailrecipient" Then
+    LDEmail.Recipient = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#emailsender" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/emailsender" Then
+    LDEmail.From = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#emailpassword" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/emailpassword" Then
+    LDEmail.Password = a
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "#include" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/include" Then
+    i2 = 1
+    rf = p + ".include.rules"
+    If LDFile.Exists(rf) Then
+      While i2 < LDFile.Length(rf)
+        txt = "Feature not yet available."
+        title = "Unavailable"
+        GraphicsWindow.ShowMessage(txt,title)
+      EndWhile
+    EndIf
+  EndIf
+    
+  If c = "#+" Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "/+" Then
+    a = value1 + value2
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If Text.StartsWith(c,"//") Then
+    i = i+1
+    Goto Start
+  EndIf
+  
+  If c = "" Then
+    i = i+1
+    Goto Start
+  EndIf
+
+
+  txt = Text.Append("Error in line ",i)
+  txt = txt + ", unknown command '" + c
+  txt = txt + "', make sure you "
+  txt = txt + "have spelt it correctly."
+  txt = txt + " Would you like to skip "
+  txt = txt + "this line of code and co"
+  txt = txt + "ntinue running the progr"
+  txt = txt + "am?"
+  title = "DylanScript - Error"
+  r = LDDialogs.Confirm(txt,title)
+
+  If r = "Yes" Then
+    i = i+1
+    Goto Start
+  Else
+    Program.End()
+  EndIf
+  Goto Start
+EndSub
+
+
+Sub ButtonClicked
+  If Controls.LastClickedButton = aob Then
+    If mode = "createdir" Then
+      GraphicsWindow.Clear()
+      GraphicsWindow.Hide()
+      File.CreateDirectory(a)
+      i = i+1
+    ElseIf mode = "deletedir" Then
+      GraphicsWindow.Clear()
+      GraphicsWindow.Hide()
+      File.DeleteDirectory(a)
+      i = i+1
+    ElseIf mode = "deletefile" Then
+      GraphicsWindow.Clear()
+      GraphicsWindow.Hide()
+      File.DeleteFile(a)
+      i = i+1      
+    ElseIf mode = "writefile" Then
+      GraphicsWindow.Clear()
+      GraphicsWindow.Hide()
+      File.WriteContents(fto,a)
+      i = i+1
+    ElseIf mode = "setwallpaper" Then
+      GraphicsWindow.Clear()
+      GraphicsWindow.Hide()
+      Desktop.SetWallPaper(a)
+      i = i+1
+    EndIf
+  ElseIf Controls.LastClickedButton = db Then
+    GraphicsWindow.Clear()
+    GraphicsWindow.Hide()
+    i = i+1
+  ElseIf LDFile.Exists(p + ".ButtonClicked.dsr") Then
+    p = p + ".ButtonClicked.dsr"
+    i = 1
+  EndIf
+EndSub
+
+Sub KeyDown
+  If LDFile.Exists(p + ".KeyDown.dsr") Then
+    p = p + ".KeyDown.dsr"
+    i = 1
+  EndIf
+EndSub
+
+Sub KeyUp
+  If LDFile.Exists(p + ".KeyUp.dsr") Then
+    p = p + ".KeyUp.dsr"
+    i = 1
+  EndIf
+EndSub
+
+Sub MouseUp
+  If LDFile.Exists(p + ".MouseUp.dsr") Then
+    p = p + ".MouseUp.dsr"
+    i = 1
+  EndIf
+EndSub
+
+Sub MouseDown
+  If LDFile.Exists(p + ".MouseDown.dsr") Then
+    p = p + ".MouseDown.dsr"
+    i = 1
+  EndIf
+EndSub

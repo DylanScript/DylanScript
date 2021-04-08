@@ -1,0 +1,77 @@
+ext = "DylanScript Installer|*.dsi"
+pd = Program.Directory + "\"
+
+If Program.GetArgument(1) <> "" Then
+  p = Program.GetArgument(1)
+Else
+  p = LDDialogs.OpenFile(ext,"")
+EndIf
+pn = LDFile.GetFile(p)
+
+GraphicsWindow.Show()
+Controls.ButtonClicked = Button
+LDControls.RadioButtonClicked = RadioButton
+GraphicsWindow.Title = "Install " + pn
+GraphicsWindow.BrushColor = "Black"
+GraphicsWindow.FontSize = 20
+GraphicsWindow.Width = 300
+GraphicsWindow.Height = 450
+txt = "Welcome to the DylanScript Ins"
+txt = txt + "taller. This setup wizar"
+txt = txt + "d will install " + pn
+txt = txt + " to your computer. Make "
+txt = txt + "sure you trust this prog"
+txt = txt + "ram before you install i"
+txt = txt + "t. If it exists, setup.d"
+txt = txt + "s will automatically be "
+txt = txt + "run to finish installing."
+w = 290
+GraphicsWindow.DrawBoundText(5,5,w,txt)
+nb1 = Controls.AddButton("Next",155,400)
+Controls.SetSize(nb1,140,50)
+
+Sub Button
+  If Controls.LastClickedButton = nb1 Then
+    GraphicsWindow.Clear()
+    nb2 = Controls.AddButton("Next",155,400)
+    Controls.SetSize(nb2,140,50)
+    txt = "Please select the install loca"
+    txt = txt + "tion type by choosing on"
+    txt = txt + "e of the options below. "
+    txt = txt + "If you select custom loc"
+    txt = txt + "ation, please type the l"
+    txt = txt + "ocation of the install l"
+    txt = txt + "ocation or click browse."
+    w = 290
+    GraphicsWindow.DrawBoundText(5,5,w,txt)
+    txt = "Default location (" + pd + "apps)"
+    rb1 = LDControls.AddRadioButton(txt,"ilb")
+    txt = "Custom location"
+    rb2 = LDControls.AddRadioButton(txt,"ilb")
+    Controls.Move(rb1,5,200)
+    Controls.Move(rb2,5,220)
+    tb1 = Controls.AddTextBox(5,240)
+    Controls.SetSize(tb1,25,290)
+    Controls.HideControl(tb1)
+  EndIf
+  If Controls.LastClickedButton = nb2 Then
+    If LDControls.RadioButtonGet(rb2) Then
+      il = Controls.GetTextBoxText(tb1)
+    EndIf
+    LDZip.UnZip(p,il)
+    dsd = pd + "RunDylanScript.exe"
+    If LDFile.Exists(il + "\setup.ds") Then
+    LDProcess.Start(dsd,il + "\setup.ds")
+    EndIf
+  EndIf
+EndSub
+
+Sub RadioButton
+  If LDControls.LastRadioButton = rb1 Then
+    Controls.HideControl(tb1)
+    il = pd + "apps\" + pn
+  EndIf
+  If LDControls.LastRadioButton = rb2 Then
+    Controls.ShowControl(tb1)
+  EndIf
+EndSub

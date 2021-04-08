@@ -1,0 +1,8 @@
+txt = "Are you sure you would like to uninstall DylanScript?"
+txt = txt + " This will remove " + Program.Directory
+title = "DylanScript Uninstaller"
+If LDDialogs.Confirm(txt,title) = "Yes" Then
+  File.DeleteDirectory(Program.Directory)
+Else
+  Program.End()
+EndIf
