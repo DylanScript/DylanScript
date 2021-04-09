@@ -1,5 +1,3 @@
- - Welcome to DylanScript! DylanScript is an open source, interpreted programming language which you can download from DylanScript.wordpress.com.
- - Before you download DylanScript, please read the license.
- - I will happily take new versions of the language and I will be happy to make tutorials for the language.
- - If you have any questions, feel free to email me them at CodeDylanScript@gmail.com.
- - Happy coding :)
+ - This version of DylanScript was actually made on a simple programming language called small basic and this DylanScript only consists of 1 main file (DylanScript.sb).
+ - You can download the full DylanScript at DylanScript.wordpress.com/download/ds1 and the source code also comes with it (and on this page).
+ - If you have any questions please feel free to email me at CodeDylanScript@gmail.com.
